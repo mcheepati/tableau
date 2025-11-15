@@ -19,6 +19,7 @@ Conditional edges in LangGraph allow you to create dynamic routing in state grap
 tableau/
 ├── langgraph_conditional_edge.py    # Main implementation
 ├── test_langgraph_conditional_edge.py  # Test suite
+├── example_process_file.py          # Example: process data file
 ├── requirements.txt                 # Python dependencies
 ├── testsata.jason                   # Sample data file
 └── README.md                        # This file
@@ -37,11 +38,19 @@ pip install -r requirements.txt
 
 ### Running the Example
 
+Basic example with hardcoded data:
+
 ```bash
 python langgraph_conditional_edge.py
 ```
 
-This will demonstrate the conditional edge functionality with sample user data.
+Process data from the existing data file:
+
+```bash
+python example_process_file.py
+```
+
+These scripts will demonstrate the conditional edge functionality with sample user data.
 
 ### Import in Your Code
 
@@ -87,15 +96,25 @@ The `score_router()` function examines the state and returns either "high_score"
 ```
 START
   ↓
-process_user
+process_user (initial processing)
   ↓
-validate_score
+validate_score (check score threshold)
   ↓
-score_router (conditional)
-  ├─→ high_score (if score >= 5)
-  └─→ low_score (if score < 5)
-  ↓
-END
+score_router (conditional edge - decision point)
+  ├─→ high_score (if score >= 5) → END
+  └─→ low_score (if score < 5) → END
+```
+
+### Visual Example
+
+```
+User: madhu, Score: 6, Domain: mx
+  → process_user → validate_score → [score >= 5?] → high_score → END
+     Status: high_score_processed
+
+User: john, Score: 3, Domain: us
+  → process_user → validate_score → [score < 5?] → low_score → END
+     Status: low_score_processed
 ```
 
 ## Running Tests
